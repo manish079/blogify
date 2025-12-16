@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from blogs.models import Category
 
-
-
-# def home(request):
-#     return JsonResponse({'message': 'Welcome to Blogify!'})
 
 def home(request):
-    return render(request, 'home.html')
+    categories = Category.objects.all()
+    context = {
+        'categories': categories
+    }
+    return render(request, 'home.html', context)

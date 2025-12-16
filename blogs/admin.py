@@ -11,6 +11,7 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'author', 'status', 'is_featured', 'created_at', 'updated_at')
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('id', 'title', 'category__category_name', 'status')
+    list_editable = ('status', 'is_featured')
     
 
 
