@@ -1,0 +1,50 @@
+<!-- to see custom error 404 page need to do debug=false-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found | Blogify</title>
+    <link
+      href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Playfair Display", serif;
+      }
+      .error-container {
+        text-align: center;
+      }
+      .error-code {
+        font-size: 8rem;
+        font-weight: 900;
+        color: #ffc107;
+      }
+      .error-message {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+      .btn-home {
+        font-size: 1.1rem;
+        padding: 10px 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <div class="error-code">404</div>
+      <div class="error-message">
+        Oops! The category you are looking for does not exist.
+      </div>
+      <a href="/" class="btn btn-warning btn-home">Go Back Home</a>
+    </div>
+  </body>
+</html>
