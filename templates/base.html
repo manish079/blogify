@@ -20,8 +20,20 @@
             <div class="col-4 pt-1">
               <a class="blog-header-logo text-dark" href="/">Blogify</a>
             </div>
+
+            <div class="col-4">
+              <form action="{% url 'search_blogs' %}" method="GET">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search..." value={{keyword}}  name='keyword'>
+                  <div class="input-group-append">
+                    <button class="btn btn-warning" type="submit" id="button-search">
+                     Go
+                    </button>
+                  </div>
+                </div>
+            </div>
            
-            <div class="col-4 d-flex justify-content-end align-items-center">
+             <div class="col-4 d-flex justify-content-end align-items-center">
              
               <a class="btn btn-sm btn-warning" href="#">Login</a> &nbsp;
               <a class="btn btn-sm btn-outline-secondary" href="#">Register</a>
@@ -38,14 +50,19 @@
           </nav>
         </div>
 
-  <!-- Main Content Part -->
-  {% block content %}
+        <!-- Main Content Part -->
+        {% block content %}
 
-  {% endblock %}
+      
+        {% endblock %}
+            <!-- Footer Part -->
+        <footer class="blog-footer">
+            <p>© 2025 Manish Kumar 💻✨</p>
+        </footer>
+        
+    
+    </div>
 
-  <!-- Footer Part -->
- <footer class="blog-footer">
-      <p>© 2025 Manish Kumar 💻✨</p>
-    </footer>
+
     </body>
     </html>
