@@ -13,7 +13,7 @@
     >
     {% endif %}
     <a
-      href="#"
+      href="{% url 'categories' %}"
       class="nav-link text-dark {% if '/categories/' in request.path %}bg-warning{% endif %}"
       >Categories</a
     >

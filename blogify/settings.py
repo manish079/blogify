@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'blogs',
     'cores',
     'dashboard',
+    'crispy_forms',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -140,6 +142,10 @@ STATICFILES_DIRS = [
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
+
+# Crispy Forms Configuration
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
