@@ -7,7 +7,7 @@
     >
     {% if perms.auth.view_user %}
     <a
-      href="#"
+      href="{% url 'users' %}"
       class="nav-link text-dark {% if '/users/' in request.path %}bg-warning{% endif %}"
       >Users</a
     >
