@@ -1,31 +1,139 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% block content %}
 
-<div class="row">
-  <!-- Left sidebar -->
-  <!-- load the sidebar here -->
-  {% include 'dashboard/sidebar.html' %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      {% include 'dashboard/sidebar.html' %}
+    </div>
 
-  <!-- Right side content -->
-  <div class="col-md-9">
-    <div class="row">
-      <div class="col">
-        <div class="card border-default mb-3">
-          <div class="card-header text-center text-uppercase font-weight-bold">
-            All Categories
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <!-- Dashboard Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h2 mb-0">Dashboard</h1>
+          <p class="text-muted mb-0">Welcome back! Here's what's happening with your blog.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{% url 'add_post' %}" class="btn btn-warning">
+            <i class="fas fa-plus"></i> New Post
+          </a>
+          <a href="{% url 'add_category' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-plus"></i> New Category
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm hover-lift h-100">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <div class="bg-warning bg-opacity-10 rounded p-3">
+                    <i class="fas fa-folder text-warning fa-2x"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h3 class="h5 mb-1">Categories</h3>
+                  <div class="display-6 fw-bold text-warning">{{ category_count }}</div>
+                  <small class="text-muted">Total categories</small>
+                </div>
+              </div>
+              <div class="mt-3">
+                <a href="{% url 'categories' %}" class="btn btn-sm btn-outline-warning">Manage Categories</a>
+              </div>
+            </div>
           </div>
-          <div class="card-body text-dark">
-            <h5 class="card-title text-center">{{ category_count }}</h5>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm hover-lift h-100">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <div class="bg-primary bg-opacity-10 rounded p-3">
+                    <i class="fas fa-newspaper text-primary fa-2x"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h3 class="h5 mb-1">Blog Posts</h3>
+                  <div class="display-6 fw-bold text-primary">{{ blogs_count }}</div>
+                  <small class="text-muted">Total posts</small>
+                </div>
+              </div>
+              <div class="mt-3">
+                <a href="{% url 'posts' %}" class="btn btn-sm btn-outline-primary">Manage Posts</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col">
-        <div class="card border-default mb-3">
-          <div class="card-header text-center text-uppercase font-weight-bold">
-            All posts
-          </div>
-          <div class="card-body text-dark">
-            <h5 class="card-title text-center">{{ blogs_count }}</h5>
+      <!-- Recent Activity -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 p-4">
+          <h3 class="h5 mb-0">Quick Actions</h3>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <a href="{% url 'add_post' %}" class="text-decoration-none">
+                <div class="border rounded p-3 hover-lift">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-pen text-warning me-3"></i>
+                    <div>
+                      <div class="fw-semibold">Create New Post</div>
+                      <small class="text-muted">Write and publish a new blog post</small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-6">
+              <a href="{% url 'posts' %}" class="text-decoration-none">
+                <div class="border rounded p-3 hover-lift">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-list text-primary me-3"></i>
+                    <div>
+                      <div class="fw-semibold">View All Posts</div>
+                      <small class="text-muted">Manage and edit existing posts</small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-6">
+              <a href="{% url 'categories' %}" class="text-decoration-none">
+                <div class="border rounded p-3 hover-lift">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-tags text-success me-3"></i>
+                    <div>
+                      <div class="fw-semibold">Manage Categories</div>
+                      <small class="text-muted">Organize your blog categories</small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% if perms.auth.view_user %}
+            <div class="col-md-6">
+              <a href="{% url 'users' %}" class="text-decoration-none">
+                <div class="border rounded p-3 hover-lift">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-users text-info me-3"></i>
+                    <div>
+                      <div class="fw-semibold">Manage Users</div>
+                      <small class="text-muted">User administration</small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -33,4 +141,34 @@
   </div>
 </div>
 
+<style>
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+}
+
+.display-6 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .display-6 {
+    font-size: 2rem;
+  }
+  
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+</style>
 {% endblock %}

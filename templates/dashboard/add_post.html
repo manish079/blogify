@@ -1,23 +1,170 @@
-{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+{% extends 'base.html' %} 
+{% block content %}
 
-<div class="row">
-  <!-- Left sidebar -->
-  <!-- load the sidebar here -->
-  {% include 'dashboard/sidebar.html' %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      {% include 'dashboard/sidebar.html' %}
+    </div>
 
-  <!-- Right side content -->
-  <div class="col-md-9">
-    <h2>Add New Post</h2>
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h2 mb-0">Create New Post</h1>
+          <p class="text-muted mb-0">Write and publish a new blog post</p>
+        </div>
+        <a href="{% url 'posts' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left"></i> Back to Posts
+        </a>
+      </div>
 
-    <form
-      action="{% url 'add_post' %}"
-      method="POST"
-      enctype="multipart/form-data"
-    >
-      {% csrf_token %} {{ form | crispy }}
-      <button type="submit" class="btn btn-warning">Submit</button>
-    </form>
-    <br />
+      <!-- Add Post Form -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          {% if form.errors %}
+            <div class="alert alert-danger mb-4">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3"></i>
+                <div>
+                  <strong>Please fix the following errors:</strong>
+                  <ul class="mb-0 mt-2">
+                    {% for field, errors in form.errors.items %}
+                      {% for error in errors %}
+                        <li>{{ field|title }}: {{ error }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          
+          <form action="{% url 'add_post' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label for="id_title" class="form-label fw-semibold">Post Title</label>
+                <input type="text" name="title" id="id_title" 
+                       class="form-control" placeholder="Enter an engaging title" required>
+                {% if form.title.errors %}
+                <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                {% endif %}
+                <small class="text-muted">Make it catchy and descriptive to attract readers</small>
+              </div>
+              
+              <div class="col-md-4">
+                <label for="id_category" class="form-label fw-semibold">Category</label>
+                <select name="category" id="id_category" class="form-select" required>
+                  <option value="">Select a category</option>
+                  {% for cat in categories %}
+                  <option value="{{ cat.id }}">{{ cat.category_name }}</option>
+                  {% endfor %}
+                </select>
+                {% if form.category.errors %}
+                <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                {% endif %}
+              </div>
+              
+              <div class="col-12">
+                <label for="id_short_description" class="form-label fw-semibold">Short Description</label>
+                <textarea name="short_description" id="id_short_description" 
+                          class="form-control" rows="3" placeholder="Brief description that will appear in previews"
+                          required></textarea>
+                {% if form.short_description.errors %}
+                <div class="text-danger small mt-1">{{ form.short_description.errors }}</div>
+                {% endif %}
+                <small class="text-muted">This appears in post previews, social media, and search results</small>
+              </div>
+              
+              <div class="col-12">
+                <label for="id_blog_body" class="form-label fw-semibold">Post Content</label>
+                <textarea name="blog_body" id="id_blog_body" 
+                          class="form-control" rows="15" placeholder="Write your amazing content here..."
+                          required></textarea>
+                {% if form.blog_body.errors %}
+                <div class="text-danger small mt-1">{{ form.blog_body.errors }}</div>
+                {% endif %}
+                <small class="text-muted">Use paragraphs, headings, and formatting to make your content readable</small>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="id_featured_image" class="form-label fw-semibold">Featured Image</label>
+                <input type="file" name="featured_image" id="id_featured_image" 
+                       class="form-control" accept="image/*">
+                {% if form.featured_image.errors %}
+                <div class="text-danger small mt-1">{{ form.featured_image.errors }}</div>
+                {% endif %}
+                <small class="text-muted">High-quality image that represents your post (optional)</small>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Post Status</label>
+                <div class="d-flex gap-3 mt-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="id_published" 
+                           value="Published">
+                    <label class="form-check-label" for="id_published">
+                      <span class="badge bg-success">Published</span>
+                      <small class="text-muted d-block">Visible to everyone</small>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="id_draft" 
+                           value="Draft" checked>
+                    <label class="form-check-label" for="id_draft">
+                      <span class="badge bg-warning">Draft</span>
+                      <small class="text-muted d-block">Save for later</small>
+                    </label>
+                  </div>
+                </div>
+                {% if form.status.errors %}
+                <div class="text-danger small mt-1">{{ form.status.errors }}</div>
+                {% endif %}
+              </div>
+              
+              <div class="col-12">
+                <hr class="my-4">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" name="is_featured" id="id_is_featured">
+                  <label class="form-check-label" for="id_is_featured">
+                    <span class="fw-semibold">Featured Post</span>
+                    <small class="text-muted d-block">Display this post prominently on the homepage</small>
+                  </label>
+                </div>
+                {% if form.is_featured.errors %}
+                <div class="text-danger small mt-1">{{ form.is_featured.errors }}</div>
+                {% endif %}
+              </div>
+              
+              <div class="col-12">
+                <hr class="my-4">
+                <div class="alert alert-info d-flex align-items-center">
+                  <i class="fas fa-lightbulb me-3"></i>
+                  <div>
+                    <strong>Writing Tips:</strong> Use clear headings, break up long paragraphs, and include relevant examples. Consider your audience and what they'll find most valuable.
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <div class="d-flex justify-content-between pt-4">
+                  <a href="{% url 'posts' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                  </a>
+                  <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-paper-plane"></i> Publish Post
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

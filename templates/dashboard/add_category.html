@@ -1,25 +1,88 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-{% load crispy_forms_tags %}
 
-<div class="row">
-    <!-- Left sidebar -->
-    <!-- load the sidebar here -->
-    {% include 'dashboard/sidebar.html' %}
-
-    <!-- Right side content -->
-    <div class="col-md-9">
-        <h2>Add New Category</h2>
-        
-        <form action="{% url 'add_category' %}" method="POST" style="width:500px;">
-            {% csrf_token %}
-            {{ form | crispy }}
-            <button type="submit" class="btn btn-warning">Submit</button>
-        </form>
-        <br>
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      {% include 'dashboard/sidebar.html' %}
     </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h2 mb-0">Add New Category</h1>
+          <p class="text-muted mb-0">Create a new category to organize your blog posts</p>
+        </div>
+        <a href="{% url 'categories' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left"></i> Back to Categories
+        </a>
+      </div>
+
+      <!-- Add Category Form -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <form action="{% url 'add_category' %}" method="POST">
+            {% csrf_token %}
+            
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label for="id_category_name" class="form-label fw-semibold">Category Name</label>
+                <input type="text" name="category_name" id="id_category_name" 
+                       class="form-control" placeholder="Enter category name" required>
+                {% if form.category_name.errors %}
+                <div class="text-danger small mt-1">{{ form.category_name.errors }}</div>
+                {% endif %}
+                <small class="text-muted">Choose a descriptive name that helps users understand the content type</small>
+              </div>
+              
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Preview</label>
+                <div class="bg-light rounded p-3 text-center">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <i class="fas fa-tag text-primary me-2"></i>
+                    <span class="text-muted" id="category-preview">Category Name</span>
+                  </div>
+                  <small class="text-muted d-block mt-2">How it will appear</small>
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <hr class="my-4">
+                <div class="alert alert-info d-flex align-items-center">
+                  <i class="fas fa-lightbulb me-3"></i>
+                  <div>
+                    <strong>Best Practices:</strong> Use clear, concise names like "Technology", "Travel", or "Food & Recipes". Avoid using special characters or numbers in category names.
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <div class="d-flex justify-content-between pt-4">
+                  <a href="{% url 'categories' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                  </a>
+                  <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-plus"></i> Create Category
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+document.getElementById('id_category_name').addEventListener('input', function(e) {
+  const preview = document.getElementById('category-preview');
+  preview.textContent = e.target.value || 'Category Name';
+});
+</script>
 
 {% endblock %}

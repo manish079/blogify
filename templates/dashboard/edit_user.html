@@ -1,29 +1,131 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-{% load crispy_forms_tags %}
 
-<div class="row">
-    <!-- Left sidebar -->
-    <!-- load the sidebar here -->
-    {% include 'dashboard/sidebar.html' %}
-
-    <!-- Right side content -->
-    <div class="col-md-9">
-        {% if perms.auth.add_user %}
-        <h2>Edit User</h2>
-        
-        <form action="#" method="POST" >
-            {% csrf_token %}
-            {{ form | crispy }}
-            <button type="submit" class="btn btn-warning">Submit</button>
-        </form>
-        <br>
-        {% else %}
-        <h5>You do not have permission to view this page</h5>
-        {% endif %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      {% include 'dashboard/sidebar.html' %}
     </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      {% if perms.auth.change_user %}
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h1 class="h2 mb-0">Edit User</h1>
+            <p class="text-muted mb-0">Update user information and permissions</p>
+          </div>
+          <a href="{% url 'users' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Users
+          </a>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <form action="" method="POST">
+              {% csrf_token %}
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="id_username" class="form-label fw-semibold">Username</label>
+                  <input type="text" name="username" id="id_username" class="form-control" value="{{ form.username.value|default:user.username }}" required>
+                  {% if form.username.errors %}
+                  <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="id_email" class="form-label fw-semibold">Email</label>
+                  <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default:user.email }}" required>
+                  {% if form.email.errors %}
+                  <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="id_first_name" class="form-label fw-semibold">First Name</label>
+                  <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ form.first_name.value|default:user.first_name }}">
+                  {% if form.first_name.errors %}
+                  <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="id_last_name" class="form-label fw-semibold">Last Name</label>
+                  <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ form.last_name.value|default:user.last_name }}">
+                  {% if form.last_name.errors %}
+                  <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="col-12">
+                  <hr class="my-4">
+                  <h5 class="fw-semibold mb-3">Permissions</h5>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="is_active" id="id_is_active" {% if user.is_active %}checked{% endif %}>
+                    <label class="form-check-label" for="id_is_active">
+                      <span class="fw-semibold">Active</span>
+                      <small class="text-muted d-block">User can login and access the system</small>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="is_staff" id="id_is_staff" {% if user.is_staff %}checked{% endif %}>
+                    <label class="form-check-label" for="id_is_staff">
+                      <span class="fw-semibold">Staff Status</span>
+                      <small class="text-muted d-block">Can access admin dashboard</small>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="is_superuser" id="id_is_superuser" {% if user.is_superuser %}checked{% endif %}>
+                    <label class="form-check-label" for="id_is_superuser">
+                      <span class="fw-semibold">Superuser</span>
+                      <small class="text-muted d-block">Full system access</small>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-12">
+                  <div class="d-flex justify-content-between pt-4">
+                    <a href="{% url 'users' %}" class="btn btn-outline-secondary">
+                      <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-warning">
+                      <i class="fas fa-save"></i> Update User
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      {% else %}
+        <!-- Permission Denied -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-5 text-center">
+            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+            <h3 class="h4 mb-2">Access Denied</h3>
+            <p class="text-muted">You do not have permission to edit users.</p>
+            <a href="{% url 'users' %}" class="btn btn-warning">
+              <i class="fas fa-arrow-left"></i> Back to Users
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}
